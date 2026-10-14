@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الإدارة - المطعم</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
+        .admin-header { background: #fff; padding: 15px 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        #orders-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .order-card { background: #fff; border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-right: 5px solid #007bff; }
+        .order-card.pending { border-right-color: #ffc107; }
+        .order-card.accepted { border-right-color: #28a745; }
+        .order-card.rejected { border-right-color: #dc3545; }
+        .order-header { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 10px; font-size: 14px; color: #666; }
+        .order-body p { margin: 6px 0; font-size: 14px; }
+        .order-items-list { margin: 5px 0 15px 20px; padding: 0; font-size: 13px; color: #444; }
+        .total-price { color: #d9534f; font-weight: bold; font-size: 16px; }
+        .prep-input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn-group { display: flex; gap: 10px; }
+        .btn-accept, .btn-reject { flex: 1; padding: 10px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #fff; }
+        .btn-accept { background: #28a745; }
+        .btn-reject { background: #dc3545; }
+        .status-badge { padding: 8px; border-radius: 4px; text-align: center; font-weight: bold; font-size: 13px; background: #e2e3e5; color: #383d41; }
+        #login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .login-box { background: #fff; padding: 30px; border-radius: 10px; width: 350px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .login-box select, .login-box input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .login-box button { background: #007bff; color: white; border: none; padding: 10px 20px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-modal">
+        <div class="login-box">
+            <h3>تسجيل دخول الإدارة</h3>
+            <p>اختر صفك أو اسمك:</p>
+            <select id="admin-role-select">
+                <option value="المدير العام">المدير العام</option>
+                <option value="كاشير رقم 1">كاشير رقم 1</option>
+                <option value="كاشير رقم 2">كاشير رقم 2</option>
+            </select>
+            <input type="text" id="admin-custom-name" placeholder="أو اكتب اسمك الصريح هنا...">
+            <button onclick="setAdminIdentity()">دخول للوحة التحكم</button>
+        </div>
+    </div>
+
+    <div class="admin-header">
+        <h2>🍔 لوحة متابعة الطلبات الحية</h2>
+        <div>المسؤول الحالي: <span id="current-admin-display" style="color: #007bff; font-weight: bold;">غير محدد</span></div>
+    </div>
+
+    <div id="orders-container"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
